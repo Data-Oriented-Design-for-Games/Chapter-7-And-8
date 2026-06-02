@@ -192,7 +192,7 @@ mousePosition = Input.GetTouch(0).position;
         void gameOver()
         {
             Game.Instance.SetMenuState(MENU_STATE.GAME_OVER);
-            GameDataIO.Save(gameData, balance);
+            GameDataIO.SaveLocal(gameData, balance);
             MetaDataIO.Save(metaData);
             hideUI();
         }
@@ -200,7 +200,7 @@ mousePosition = Input.GetTouch(0).position;
         void pauseGame()
         {
             Game.Instance.SetMenuState(MENU_STATE.PAUSE_MENU);
-            GameDataIO.Save(gameData, balance);
+            GameDataIO.SaveLocal(gameData, balance);
             MetaDataIO.Save(metaData);
         }
     }

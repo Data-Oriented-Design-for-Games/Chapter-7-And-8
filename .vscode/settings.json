@@ -56,5 +56,5 @@
         "temp/": true,
         "Temp/": true
     },
-    "dotnet.defaultSolution": "NEW-Chapter-7-And-8.sln"
+    "dotnet.defaultSolution": "Chapter-7-And-8.sln"
 }

@@ -39,7 +39,7 @@ namespace Survivor
             gameData.AliveEnemyIndices[gameData.AliveEnemyCount++] = enemyIndex;
             addedEnemyIndices[addedEnemyCount++] = enemyIndex;
 
-            Vector2 direction = Vector2.zero;
+            Vector2 direction = gameData.PlayerDirection;
             float angle;
             if (direction.magnitude == 0.0f)
             {
@@ -146,7 +146,7 @@ namespace Survivor
             for (int i = 0; i < gameData.AliveEnemyCount; i++)
             {
                 int enemyIndex1 = gameData.AliveEnemyIndices[i];
-                for (int j = enemyIndex1 + 1; j < gameData.AliveEnemyCount; j++)
+                for (int j = i + 1; j < gameData.AliveEnemyCount; j++)
                 {
                     int enemyIndex2 = gameData.AliveEnemyIndices[j];
                     Vector2 diff = gameData.EnemyPosition[enemyIndex1] - gameData.EnemyPosition[enemyIndex2];
@@ -161,14 +161,32 @@ namespace Survivor
             }
         }
 
-        static void checkEnemyOutOfBounds(GameData gameData, Balance balance, Span<int> removedEnemyIndices, ref int removedEnemyCount)
+        static void checkEnemyOutOfBounds(
+            GameData gameData,
+            Balance balance,
+            Span<int> removedEnemyIndices,
+            ref int removedEnemyCount)
         {
             float distanceSqr = balance.SpawnRadius * balance.SpawnRadius * 1.1f;
+
+            Span<int> outOfBoundsEnemyIndices = stackalloc int[balance.NumEnemies];
+            int outOfBoundsEnemyCount = 0;
+
             for (int i = 0; i < gameData.AliveEnemyCount; i++)
             {
                 int enemyIndex = gameData.AliveEnemyIndices[i];
+
                 if (gameData.EnemyPosition[enemyIndex].sqrMagnitude > distanceSqr)
-                    removeEnemy(gameData, enemyIndex, removedEnemyIndices, ref removedEnemyCount);
+                    outOfBoundsEnemyIndices[outOfBoundsEnemyCount++] = enemyIndex;
+            }
+
+            for (int i = 0; i < outOfBoundsEnemyCount; i++)
+            {
+                removeEnemy(
+                    gameData,
+                    outOfBoundsEnemyIndices[i],
+                    removedEnemyIndices,
+                    ref removedEnemyCount);
             }
         }
 
